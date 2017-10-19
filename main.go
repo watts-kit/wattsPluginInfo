@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	l "git.scc.kit.edu/lukasburgey/wattsPluginLib"
 	"github.com/kalaspuffar/base64url"
+	"time"
 )
 
 var keyToName = map[string]string{
@@ -26,24 +27,30 @@ func request(pi l.Input) l.Output {
 	}
 
 	for key, value := range pi.UserInfo {
-		credType := "text"
-		if key == "groups" {
-			credType = "textarea"
-		}
+		var nextCredential l.Credential
 
 		bs, err := json.Marshal(value)
 		l.Check(err, 1, "unable to marshal user info key "+key)
 
-		credential = append(
-			credential,
-			l.Credential{
-				"name":  keyToName[key],
-				"type":  credType,
-				"value": string(bs),
-			})
+		credName := key
+		if val, ok := keyToName[key]; ok {
+			credName = val
+		}
+		nextCredential = l.AutoCredential(credName, bs)
+		credential = append(credential, nextCredential)
 	}
 
-	return l.PluginGoodRequest(credential, "user_info")
+	// the who plugin input is a credential here
+	bs, err := json.MarshalIndent(pi, "", "    ")
+	l.Check(err, 1, "unable to marshal json object")
+	credential = append(
+		credential,
+		l.AutoCredential("json_object", string(bs)),
+	)
+
+	state := "user_info" + time.Now().String()
+
+	return l.PluginGoodRequest(credential, state)
 }
 
 func revoke(pi l.Input) l.Output {
@@ -51,7 +58,7 @@ func revoke(pi l.Input) l.Output {
 }
 
 func main() {
-	pluginDescriptor := l.PluginDescriptor{
+	l.PluginRun(l.PluginDescriptor{
 		Version:     "0.1.0",
 		Author:      "Lukas Burgey @ KIT within the INDIGO DataCloud Project",
 		Name:        "wattsPluginInfo",
@@ -62,6 +69,5 @@ func main() {
 		},
 		ConfigParams:  []l.ConfigParamsDescriptor{},
 		RequestParams: []l.RequestParamsDescriptor{},
-	}
-	l.PluginRun(pluginDescriptor)
+	})
 }
