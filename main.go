@@ -20,9 +20,9 @@ func request(pi l.Input) l.Output {
 	l.Check(err, 1, "could not decode WaTTSUserID")
 
 	credential := []l.Credential{
-		l.Credential{Name: "WaTTS version", Type: "text", Value: pi.WaTTSVersion},
-		l.Credential{Name: "WaTTS userid", Type: "text", Value: pi.WaTTSUserID},
-		l.Credential{Name: "WaTTS userid (decoded)", Type: "text", Value: string(uidDecoded)},
+		l.Credential{"name": "WaTTS version", "type": "text", "value": pi.WaTTSVersion},
+		l.Credential{"name": "WaTTS userid", "type": "text", "value": pi.WaTTSUserID},
+		l.Credential{"name": "WaTTS userid (decoded)", "type": "text", "value": string(uidDecoded)},
 	}
 
 	for key, value := range pi.UserInfo {
@@ -37,9 +37,9 @@ func request(pi l.Input) l.Output {
 		credential = append(
 			credential,
 			l.Credential{
-				Name:  keyToName[key],
-				Type:  credType,
-				Value: string(bs),
+				"name":  keyToName[key],
+				"type":  credType,
+				"value": string(bs),
 			})
 	}
 
