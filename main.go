@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	l "git.scc.kit.edu/lukasburgey/wattsPluginLib"
 	"github.com/kalaspuffar/base64url"
+	l "github.com/watts-kit/wattsPluginLib"
 	"time"
 )
 
@@ -59,11 +59,11 @@ func revoke(pi l.Input) l.Output {
 
 func main() {
 	l.PluginRun(l.PluginDescriptor{
-		Version:     "0.1.0",
-		Author:      "Lukas Burgey @ KIT within the INDIGO DataCloud Project",
+		Version:        "0.1.0",
+		Author:         "Lukas Burgey @ KIT within the INDIGO DataCloud Project",
 		DeveloperEmail: "ubedv@student.kit.edu",
-		Name:        "wattsPluginInfo",
-		Description: "A watts plugin to get infos about the",
+		Name:           "wattsPluginInfo",
+		Description:    "A watts plugin to get infos about the user",
 		Actions: map[string]l.Action{
 			"request": request,
 			"revoke":  revoke,
