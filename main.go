@@ -61,6 +61,7 @@ func main() {
 	l.PluginRun(l.PluginDescriptor{
 		Version:     "0.1.0",
 		Author:      "Lukas Burgey @ KIT within the INDIGO DataCloud Project",
+		DeveloperEmail: "ubedv@student.kit.edu",
 		Name:        "wattsPluginInfo",
 		Description: "A watts plugin to get infos about the",
 		Actions: map[string]l.Action{
